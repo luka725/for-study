@@ -1,0 +1,5 @@
+1. apply protection for FTP (Caution does not hurt :) )
+2. add code for check version of "PHP" or any programming language if its compatible {make transfer of source code}.
+3. before transfer source code must be checked buy debbugger.
+4. source code must be easy to read and hard commented for explane.
+5. user of this proggrame must have possibility to modify source code defined part with filters.

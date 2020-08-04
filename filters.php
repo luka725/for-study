@@ -8,51 +8,36 @@ function addition( $argument ){
 }
 function square( $argument ){
     echo 'square '.$argument, "\n";
-    $argument = $argument - 1;
-    //$argument = $argument * $argument;
+    //$argument = $argument - 1;
+    $argument = $argument * $argument;
     echo $argument, "\n";
     return $argument;
 }
 function divide_by_two( $argument ){
     echo 'divide '.$argument, "\n";
-    $argument = $argument + 1;
-    //$argument = $argument / 2;
+    //$argument = $argument + 1;
+    $argument = $argument / 2;
     echo $argument, "\n";
     return $argument;
 }
 
-//$filters = array();
-//$hooked_functions_list = array();
-//$filters[$hook_name] = $hooked_functions_list;
-
 $filters   = array();
 
-
-function add_filter( $hook_name, $func_name, $priority, $arguments ){
-    
+function add_filter( $hook_name, $func_name, $priority, $arguments ){ 
     global $filters;
-
 
     if ( !$filters[$hook_name]):
         $filters[$hook_name] = array(
             $priority => $func_name
         );
     else:
-        //array_push ($filters[$hook_name] , [$priority => $func_name]);
         if ( isset($filters[$hook_name][$priority]) ):
             do {
                 $priority ++;
             } while (isset($filters[$hook_name][$priority]));
-            
-
         endif;
-
         $filters[$hook_name][$priority] = $func_name;
-
     endif;
-
-   // echo $hook_name.' '.$func_name , "\n";
-
 }
 
 add_filter( 'unit', 'addition', 1, 1 );
@@ -62,21 +47,16 @@ add_filter( 'unit', 'divide_by_two', 3, 1 );
 add_filter( 'unit', '21_by_by_two2', 2, 1 );
 add_filter( 'unit1', '21_by_by_two1', 2, 1 );*/
 
-
-
 function apply_filter($hook_name, $value_to_filter){
     global $filters;
+    
     ksort($filters[$hook_name]);
-    //echo 'test';
-    //echo $filters[$hook_name];
-
     print_r($filters[$hook_name]);
 
     foreach ($filters[$hook_name] as $key => $func_name){
             $value_to_filter = $func_name( $value_to_filter );
             echo 'apply filter '.$value_to_filter, "\n";
     }
-    
     return $value_to_filter;
 }
 

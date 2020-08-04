@@ -1,15 +1,23 @@
 <?php
 
 function addition( $argument ){
+    echo 'addition '.$argument, "\n";
     $argument = $argument + 1;
+    echo $argument, "\n";
     return $argument;
 }
 function square( $argument ){
-    $argument = $argument * $argument;
+    echo 'square '.$argument, "\n";
+    $argument = $argument - 1;
+    //$argument = $argument * $argument;
+    echo $argument, "\n";
     return $argument;
 }
 function divide_by_two( $argument ){
-    $argument = $argument / 2;
+    echo 'divide '.$argument, "\n";
+    $argument = $argument + 1;
+    //$argument = $argument / 2;
+    echo $argument, "\n";
     return $argument;
 }
 
@@ -17,48 +25,63 @@ function divide_by_two( $argument ){
 //$hooked_functions_list = array();
 //$filters[$hook_name] = $hooked_functions_list;
 
-$filters = array();
-$hooks = array();
-$functions = array();
+$filters   = array();
+
 
 function add_filter( $hook_name, $func_name, $priority, $arguments ){
-    global $filters;
-    global $hooks;
-    global $functions;
- 
-    array_push($filters, $hook_name, $func_name, $priority, $arguments);
-    array_push($hooks, $func_name, $priority, $arguments);
-    array_push($functions, $priority, $arguments);
- 
-    print_r($filters);
-    print_r($hooks);
-    print_r($functions);
-}
-    //print_r($filters);
-    //print_r($hooks);
-    //print_r($functions);
-    //  echo 'petre';
-    //array_push($filters[$hook_name], $hook_name, $func_name, $priority, $arguments); 
-    //$filters["$hook_name"] = $hooked_functions_list// 
-    //array_push ( $hooked_functions_list, $func_name, $priority, $arguments );
-    //echo $filters[$hook_name], "\n";
     
-add_filter( 'unit', 'addition', 1, 1 );
-add_filter( 'unit', 'square', 2, 1 );
-add_filter( 'unit', 'divide_by_two', 3, 1 );
-add_filter( 'tinu', 'by_by_two', 3, 1 );
+    global $filters;
 
-// in $tag is stored hook name 
-// in $argument is value for thing we must filter
-function apply_filter($tag, $argument){
-    global $val; 
-    echo $val[$tag];
+
+    if ( !$filters[$hook_name]):
+        $filters[$hook_name] = array(
+            $priority => $func_name
+        );
+    else:
+        //array_push ($filters[$hook_name] , [$priority => $func_name]);
+        if ( isset($filters[$hook_name][$priority]) ):
+            do {
+                $priority ++;
+            } while (isset($filters[$hook_name][$priority]));
+            
+
+        endif;
+
+        $filters[$hook_name][$priority] = $func_name;
+
+    endif;
+
+   // echo $hook_name.' '.$func_name , "\n";
+
 }
 
-/**foreach ($filters as $key => $val){
-    foreach ($val as $key1 => $val1){
-        echo $key1.' & '.$val1;
+add_filter( 'unit', 'addition', 1, 1 );
+add_filter( 'unit', 'square', 3, 1 );
+add_filter( 'unit', 'divide_by_two', 3, 1 );
+/**add_filter( 'unit', 'by_by_two', 3, 1 );
+add_filter( 'unit', '21_by_by_two2', 2, 1 );
+add_filter( 'unit1', '21_by_by_two1', 2, 1 );*/
+
+
+
+function apply_filter($hook_name, $value_to_filter){
+    global $filters;
+    ksort($filters[$hook_name]);
+    //echo 'test';
+    //echo $filters[$hook_name];
+
+    print_r($filters[$hook_name]);
+
+    foreach ($filters[$hook_name] as $key => $func_name){
+            $value_to_filter = $func_name( $value_to_filter );
+            echo 'apply filter '.$value_to_filter, "\n";
     }
-}*/
+    
+    return $value_to_filter;
+}
+
+$value_to_filter = 5;
+
+echo 'final '.apply_filter('unit' , $value_to_filter );
 
 ?>
